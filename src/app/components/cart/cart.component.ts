@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {GroceryService} from "../../service/grocery.service";
+import {GroceryService} from "../../services/grocery.service";
 
 @Component({
   selector: 'app-cart',

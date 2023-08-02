@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {GroceryFilteringService} from "../../service/grocery-filtering.service";
-import {GroceryService} from "../../service/grocery.service";
+import {GroceryFilteringService} from "../../services/grocery-filtering.service";
+import {GroceryService} from "../../services/grocery.service";
 import {combineLatest, map} from "rxjs";
 import {ItemTypeFilter} from "../../models/item";
 
