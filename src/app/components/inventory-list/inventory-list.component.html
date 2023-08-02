@@ -1,6 +1,6 @@
-<ul class="store--item-list">
+<ul *ngIf="groceries" class="store--item-list">
   <app-grocery-inventory
-    *ngFor="let item of groceries$ | async"
+    *ngFor="let item of groceries"
     [itemId]="item.id"
   />
 </ul>

@@ -1,34 +1,15 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {GroceryService} from "../../service/grocery.service";
-import {ItemType} from "../../models/item";
+import Item from "../../models/item";
 
 @Component({
-  selector: 'app-inventory',
-  templateUrl: './inventory.component.html',
-  styleUrls: ['./inventory.component.css']
+  selector: 'app-inventory-list',
+  templateUrl: './inventory-list.component.html',
+  styleUrls: ['./inventory-list.component.css']
 })
-export class InventoryComponent {
-  groceries$ = this.groceryService.groceries$;
-  private isFilterEnabled = false;
-  private filter = ItemType.Vegetable; // some default value to avoid undefined
+export class InventoryListComponent {
+  @Input() groceries: Item[] | null = null;
 
   constructor(private readonly groceryService: GroceryService) {
-  }
-
-  toggleIsFilterEnabled() {
-    this.isFilterEnabled = !this.isFilterEnabled;
-  }
-
-  toggleFilterType() {
-    switch (this.filter) {
-      case ItemType.Fruit: {
-        this.filter = ItemType.Vegetable;
-        break;
-      }
-      case ItemType.Vegetable: {
-        this.filter = ItemType.Fruit;
-        break;
-      }
-    }
   }
 }
