@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {GroceryService} from "../../service/grocery.service";
 
 @Component({
   selector: 'app-inventory',
@@ -6,5 +7,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./inventory.component.css']
 })
 export class InventoryComponent {
+  groceries$ = this.groceryService.groceries$;
 
+  constructor(private readonly groceryService: GroceryService) {
+  }
 }

@@ -1,1 +1,4 @@
-<p>grocery-inventory-view works!</p>
+<li *ngIf="itemId" class="store--item-icon">
+  <img [src]="iconPath" [alt]="'Image of a product: ' + itemId">
+  <button class="add-btn" (click)="onClick()">Add to cart</button>
+</li>

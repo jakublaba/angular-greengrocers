@@ -1,1 +1,6 @@
-<p>inventory works!</p>
+<ul class="store--item-list">
+  <app-grocery-inventory
+    *ngFor="let item of groceries$ | async"
+    [itemId]="item.id"
+  />
+</ul>
