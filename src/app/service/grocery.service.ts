@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, Observable, reduce, switchMap} from "rxjs";
+import {BehaviorSubject, map, Observable} from "rxjs";
 import Item from "../models/item";
 import {environment as env} from "../../environments/environment";
 
@@ -34,15 +34,12 @@ export class GroceryService {
     return this._cart$;
   }
 
-  get totalPrice(): Observable<number> {
-    return this._cart$.pipe(
-      switchMap((cart) => {
-        return Array.from(cart.entries()).map(([id, amount]) => {
-          const price = this.groceries.get(id)!.price;
-          return price * amount;
-        })
-      }),
-      reduce((total, price) => total + price, 0)
+  get totalPrice$(): Observable<number> {
+    return this.cart$.pipe(
+      map((groceries) => Array.from(groceries.entries()).map(([id, amount]) => {
+        const price = this.groceries.get(id)!.price;
+        return price * amount;
+      }).reduce((total, price) => total + price, 0))
     );
   }
 

@@ -8,9 +8,10 @@ import {CartComponent} from './components/cart/cart.component';
 import {InventoryComponent} from './components/inventory/inventory.component';
 import {NgOptimizedImage} from "@angular/common";
 import {HttpClientModule} from "@angular/common/http";
+import { TotalComponent } from './components/total/total.component';
 
 @NgModule({
-  declarations: [AppComponent, GroceryInventory, GroceryCart, CartComponent, InventoryComponent],
+  declarations: [AppComponent, GroceryInventory, GroceryCart, CartComponent, InventoryComponent, TotalComponent],
   imports: [BrowserModule, NgOptimizedImage, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],
