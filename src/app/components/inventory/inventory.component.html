@@ -1,6 +1,8 @@
-<ul class="store--item-list">
-  <app-grocery-inventory
-    *ngFor="let item of groceries$ | async"
-    [itemId]="item.id"
+<div>
+  <!-- Not even attempting to write css -->
+  <input type="checkbox" [checked]="isFilterEnabled$ | async" (click)="toggleIsFilterEnabled()">
+  <button (click)="toggleFilterType()">{{ filter$ | async }}</button>
+  <app-inventory-list
+    [groceries]="groceries$ | async"
   />
-</ul>
+</div>
