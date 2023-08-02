@@ -10,13 +10,13 @@ import {environment as env} from "../../environments/environment";
 export class GroceryService {
   private readonly cartRefresh$ = new BehaviorSubject<Map<string, number>>(new Map());
   private _groceries: Map<string, Item> = new Map();
+  private readonly _groceries$ = this.http.get<Item[]>(`${env.apiUrl}groceries`);
   private readonly cart$ = this.cartRefresh$.asObservable();
 
   constructor(private readonly http: HttpClient) {
-    this.http.get<Item[]>(`${env.apiUrl}/groceries`).subscribe((groceries) => {
+    this.groceries$.subscribe((groceries) => {
       this._groceries = groceries.reduce((groceries, item) => {
         groceries.set(item.id, item);
-        console.log(groceries);
         return groceries;
       }, new Map<string, Item>());
     });
@@ -26,10 +26,14 @@ export class GroceryService {
     return this._groceries;
   }
 
+  get groceries$() {
+    return this._groceries$;
+  }
+
   get totalPrice(): Observable<number> {
     return this.cart$.pipe(
       switchMap((cart) => {
-        return [...cart.entries()].map(([id, amount]) => {
+        return Array.from(cart.entries()).map(([id, amount]) => {
           const price = this.groceries.get(id)!.price;
           return price * amount;
         })
