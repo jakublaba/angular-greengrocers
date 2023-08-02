@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
-import {GroceryService} from "../../services/grocery.service";
-import Item from "../../models/item";
+import {GroceryService} from "@services/grocery.service";
+import Item from "@models/item";
 
 @Component({
   selector: 'app-inventory-list',

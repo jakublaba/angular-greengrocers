@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
-import {GroceryFilteringService} from "../../services/grocery-filtering.service";
-import {GroceryService} from "../../services/grocery.service";
+import {GroceryFilteringService} from "@services/grocery-filtering.service";
+import {GroceryService} from "@services/grocery.service";
 import {combineLatest, map} from "rxjs";
-import {ItemTypeFilter} from "../../models/item";
+import {ItemTypeFilter} from "@models/item";
 
 @Component({
   selector: 'app-inventory',
