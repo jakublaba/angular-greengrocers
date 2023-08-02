@@ -1,56 +1,31 @@
 import {Injectable} from "@angular/core";
-import {GroceryService} from "./grocery.service";
-import {BehaviorSubject, combineLatest, map} from "rxjs";
-import {ItemType} from "../models/item";
+import {BehaviorSubject, combineLatest, map, Observable} from "rxjs";
+import Item, {ItemTypeFilter, toType} from "../models/item";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroceryFilteringService {
-  private readonly _isFilterEnabled$ = new BehaviorSubject(false);
-  private readonly _filterType$ = new BehaviorSubject(ItemType.Vegetable);
+  private readonly _filterType$ = new BehaviorSubject(ItemTypeFilter.All);
 
-  constructor(private readonly groceryService: GroceryService) {
-  }
-
-  get groceries$() {
+  filter(groceries: Observable<Item[]>): Observable<Item[]> {
     return combineLatest([
-      this.groceryService.groceries$,
-      this.isFilterEnabled$,
+      groceries,
       this.filterType$
     ]).pipe(
-      map(([groceries, isFilterEnabled, filterType]) =>
-        isFilterEnabled ?
-          groceries.filter(g => g.type === filterType)
-          : groceries
+      map(([groceries, filterType]) =>
+        filterType === ItemTypeFilter.All ?
+          groceries :
+          groceries.filter(g => g.type === toType(filterType))
       )
     );
-  }
-
-  get isFilterEnabled$() {
-    return this._isFilterEnabled$;
   }
 
   get filterType$() {
     return this._filterType$;
   }
 
-  toggleIsFilterEnabled() {
-    this.isFilterEnabled$.next(!this.isFilterEnabled$.value);
-  }
-
-  toggleFilterType() {
-    let filter: ItemType;
-    switch (this.filterType$.value) {
-      case ItemType.Fruit: {
-        filter = ItemType.Vegetable;
-        break;
-      }
-      case ItemType.Vegetable: {
-        filter = ItemType.Fruit;
-        break;
-      }
-    }
+  setFilterType(filter: ItemTypeFilter) {
     this.filterType$.next(filter);
   }
 }

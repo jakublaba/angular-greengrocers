@@ -9,11 +9,12 @@ import {InventoryListComponent} from './components/inventory-list/inventory-list
 import {NgOptimizedImage} from "@angular/common";
 import {HttpClientModule} from "@angular/common/http";
 import {TotalComponent} from './components/total/total.component';
-import { InventoryComponent } from './components/inventory/inventory.component';
+import {InventoryComponent} from './components/inventory/inventory.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [AppComponent, GroceryInventory, GroceryCart, CartComponent, InventoryListComponent, TotalComponent, InventoryComponent],
-  imports: [BrowserModule, NgOptimizedImage, HttpClientModule],
+  imports: [BrowserModule, NgOptimizedImage, HttpClientModule, ReactiveFormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })

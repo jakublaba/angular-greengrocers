@@ -1,8 +1,14 @@
-<div>
-  <!-- Not even attempting to write css -->
-  <input type="checkbox" [checked]="isFilterEnabled$ | async" (click)="toggleIsFilterEnabled()">
-  <button (click)="toggleFilterType()">{{ filterType$ | async }}</button>
+<div *ngIf="observables$ | async as data">
+  <div class="filter-controls">
+    <label>Filter:</label>
+    <select (change)="setFilterType($event)">
+      <option *ngFor="let option of filterOptions">{{ option }}</option>
+    </select>
+  </div>
+  <div class="sort-controls">
+
+  </div>
   <app-inventory-list
-    [groceries]="groceries$ | async"
+    [groceries]="data.groceries"
   />
 </div>
