@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, map, Observable} from "rxjs";
-import Item from "../models/item";
+import {BehaviorSubject, combineLatest, map, Observable} from "rxjs";
+import Item, {ItemType} from "../models/item";
 import {environment as env} from "../../environments/environment";
 
 @Injectable({
@@ -12,6 +12,8 @@ export class GroceryService {
   private _groceries: Map<string, Item> = new Map();
   private readonly _groceries$ = this.http.get<Item[]>(`${env.apiUrl}groceries`);
   private readonly _cart$ = this.cartRefresh$.asObservable();
+  private readonly _isFilterEnabled$ = new BehaviorSubject(false);
+  private readonly _filterType$ = new BehaviorSubject(ItemType.Vegetable);
 
   constructor(private readonly http: HttpClient) {
     this.groceries$.subscribe((groceries) => {
@@ -27,11 +29,29 @@ export class GroceryService {
   }
 
   get groceries$() {
-    return this._groceries$;
+    return combineLatest([
+      this._groceries$,
+      this.isFilterEnabled$,
+      this.filterType$
+    ]).pipe(
+      map(([groceries, isFilterEnabled, filter]) => {
+        return isFilterEnabled ?
+          groceries.filter(g => g.type === filter) :
+          groceries;
+      })
+    )
   }
 
   get cart$() {
     return this._cart$;
+  }
+
+  get isFilterEnabled$() {
+    return this._isFilterEnabled$;
+  }
+
+  get filterType$() {
+    return this._filterType$;
   }
 
   get totalPrice$(): Observable<number> {
@@ -66,5 +86,24 @@ export class GroceryService {
       cart.delete(itemId);
     }
     this.cartRefresh$.next(cart);
+  }
+
+  toggleIsFilterEnabled() {
+    this.isFilterEnabled$.next(!this.isFilterEnabled$.value);
+  }
+
+  toggleFilterType() {
+    let filter: ItemType;
+    switch (this.filterType$.value) {
+      case ItemType.Fruit: {
+        filter = ItemType.Vegetable;
+        break;
+      }
+      case ItemType.Vegetable: {
+        filter = ItemType.Fruit;
+        break;
+      }
+    }
+    this.filterType$.next(filter);
   }
 }

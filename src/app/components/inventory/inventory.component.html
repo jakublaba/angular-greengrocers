@@ -1,7 +1,7 @@
 <div>
   <!-- Not even attempting to write css -->
   <input type="checkbox" [checked]="isFilterEnabled$ | async" (click)="toggleIsFilterEnabled()">
-  <button (click)="toggleFilterType()">{{ filter$ | async }}</button>
+  <button (click)="toggleFilterType()">{{ filterType$ | async }}</button>
   <app-inventory-list
     [groceries]="groceries$ | async"
   />
