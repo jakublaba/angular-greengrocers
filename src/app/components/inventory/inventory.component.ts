@@ -1,5 +1,8 @@
 import {Component} from '@angular/core';
-import {GroceryFilteringService} from "../../service/grocery-filtering.service";
+import {GroceryFilteringService} from "@services/grocery-filtering.service";
+import {GroceryService} from "@services/grocery.service";
+import {combineLatest, map} from "rxjs";
+import {ItemTypeFilter} from "@models/item";
 
 @Component({
   selector: 'app-inventory',
@@ -7,18 +10,24 @@ import {GroceryFilteringService} from "../../service/grocery-filtering.service";
   styleUrls: ['./inventory.component.css']
 })
 export class InventoryComponent {
-  isFilterEnabled$ = this.groceryService.isFilterEnabled$;
-  filterType$ = this.groceryService.filterType$;
-  groceries$ = this.groceryService.groceries$;
+  private readonly groceries$ = this.groceryFilterService.filter(this.groceryService.groceries$);
+  private readonly filterType$ = this.groceryFilterService.filterType$;
+  readonly filterOptions = Object.values(ItemTypeFilter);
+  observables$ = combineLatest([
+    this.groceries$,
+    this.filterType$
+  ]).pipe(
+    map(([groceries, filterType]) => ({groceries, filterType}))
+  );
 
-  constructor(private readonly groceryService: GroceryFilteringService) {
+  constructor(
+    private readonly groceryService: GroceryService,
+    private readonly groceryFilterService: GroceryFilteringService
+  ) {
   }
 
-  toggleIsFilterEnabled() {
-    this.groceryService.toggleIsFilterEnabled();
-  }
-
-  toggleFilterType() {
-    this.groceryService.toggleFilterType();
+  setFilterType(e: Event) {
+    const filter = (e.target as HTMLSelectElement).value as ItemTypeFilter;
+    this.filterType$.next(filter);
   }
 }

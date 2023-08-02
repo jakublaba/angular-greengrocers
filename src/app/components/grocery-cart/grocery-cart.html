@@ -1,7 +1,7 @@
-<li *ngIf="itemId" class="cart--item-icon">
+<li *ngIf="itemId">
   <img class="cart--item-icon" [src]="iconPath" [alt]="'Image of a product: ' + itemId">
   <p>{{ itemName }}</p>
-  <button class="add-btn" (click)="addToCart()">+</button>
-  <div>{{ amount }}</div>
-  <button class="remove-btn" (click)="removeFromCart()">-</button>
+  <button class="quantity-btn add-btn center" (click)="addToCart()">+</button>
+  <div class="quantity-text center">{{ amount }}</div>
+  <button class="quantity-btn remove-btn center" (click)="removeFromCart()">-</button>
 </li>
