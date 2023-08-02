@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {GroceryService} from "../../service/grocery.service";
+import {GroceryFilteringService} from "../../service/grocery-filtering.service";
 
 @Component({
   selector: 'app-inventory',
@@ -11,7 +11,7 @@ export class InventoryComponent {
   filterType$ = this.groceryService.filterType$;
   groceries$ = this.groceryService.groceries$;
 
-  constructor(private readonly groceryService: GroceryService) {
+  constructor(private readonly groceryService: GroceryFilteringService) {
   }
 
   toggleIsFilterEnabled() {
