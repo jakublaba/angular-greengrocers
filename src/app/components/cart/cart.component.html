@@ -1,1 +1,11 @@
-<p>cart works!</p>
+<div>
+  <div class="cart--item-list-container">
+    <ul *ngIf="cart$ | async as cart" class="cart--item-list">
+      <app-grocery-cart
+        *ngFor="let entry of cart | keyvalue"
+        [itemId]=entry.key
+        [amount]="entry.value"
+      />
+    </ul>
+  </div>
+</div>

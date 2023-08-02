@@ -11,7 +11,7 @@ export class GroceryService {
   private readonly cartRefresh$ = new BehaviorSubject<Map<string, number>>(new Map());
   private _groceries: Map<string, Item> = new Map();
   private readonly _groceries$ = this.http.get<Item[]>(`${env.apiUrl}groceries`);
-  private readonly cart$ = this.cartRefresh$.asObservable();
+  private readonly _cart$ = this.cartRefresh$.asObservable();
 
   constructor(private readonly http: HttpClient) {
     this.groceries$.subscribe((groceries) => {
@@ -30,8 +30,12 @@ export class GroceryService {
     return this._groceries$;
   }
 
+  get cart$() {
+    return this._cart$;
+  }
+
   get totalPrice(): Observable<number> {
-    return this.cart$.pipe(
+    return this._cart$.pipe(
       switchMap((cart) => {
         return Array.from(cart.entries()).map(([id, amount]) => {
           const price = this.groceries.get(id)!.price;
@@ -42,27 +46,28 @@ export class GroceryService {
     );
   }
 
-  addToCart(itemId: string, amount = 1) {
+  addToCart(itemId: string) {
     const cart = this.cartRefresh$.getValue();
     if (cart.has(itemId)) {
       const currentAmount = cart.get(itemId)!;
-      cart.set(itemId, currentAmount + amount);
+      cart.set(itemId, currentAmount + 1);
     } else {
-      cart.set(itemId, amount);
+      cart.set(itemId, 1);
     }
     this.cartRefresh$.next(cart);
   }
 
-  removeFromCart(itemId: string, amount = 1) {
+  removeFromCart(itemId: string) {
     const cart = this.cartRefresh$.getValue();
     if (!cart.has(itemId)) {
       throw new Error(`Cannot remove item ${itemId} from cart because it is not present`);
     }
     const currentAmount = cart.get(itemId)!;
-    if (amount > currentAmount) {
-      throw new Error(`Cannot remove ${amount} items because there is ${currentAmount} in the cart`);
+    if (currentAmount > 1) {
+      cart.set(itemId, currentAmount - 1);
+    } else {
+      cart.delete(itemId);
     }
-    cart.set(itemId, currentAmount - amount);
     this.cartRefresh$.next(cart);
   }
 }
