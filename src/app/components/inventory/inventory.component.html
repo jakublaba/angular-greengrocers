@@ -6,7 +6,10 @@
     </select>
   </div>
   <div class="sort-controls">
-
+    <label>Sort:</label>
+    <input type="checkbox" [checked]="data.isSortingEnabled" (change)="toggleIsSortingEnabled()">
+    <button (click)="toggleSortType()">{{ data.sortType }}</button>
+    <button (click)="toggleSortDirection()">{{ data.sortDirection }}</button>
   </div>
   <app-inventory-list
     [groceries]="data.groceries"
